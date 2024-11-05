@@ -30,7 +30,7 @@
     <ClCompile Include="src\action\move.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\action\compress.cpp">
+    <ClCompile Include="src\model\ActionHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,7 +47,7 @@
     <ClInclude Include="includes\action\move.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="includes\action\compress.h">
+    <ClInclude Include="includes\model\ActionHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,30 +1,29 @@
 #include <string>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
 
-int data[4][4];
-
-char board[15][32] = {
-	"       |       |       |       ",
-	"       |       |       |       ",
-	"       |       |       |       ",
-	"-------+-------+-------+-------",
-	"       |       |       |       ",
-	"       |       |       |       ",
-	"       |       |       |       ",
-	"-------+-------+-------+-------",
-	"       |       |       |       ",
-	"       |       |       |       ",
-	"       |       |       |       ",
-	"-------+-------+-------+-------",
-	"       |       |       |       ",
-	"       |       |       |       ",
-	"       |       |       |       ",
+int* data[4] = {
+	new int[4] {0,0,0,0},
+	new int[4] {0,0,0,0},
+	new int[4] {0,0,0,0},
+	new int[4] {0,0,0,0}
 };
+
+char* board[15];
 
 struct Vector
 {
 	int x;
 	int y;
 };
+
+void MakeBoard() {
+	for (int i = 0; i < 15; i++) {
+		if (i % 4 == 3) board[i] = new char[32] { "-------+-------+-------+-------" };
+		else board[i] = new char[32] {"       |       |       |       "};
+	}
+}
 
 Vector* MapBoard(Vector* base) {
 	int x = base->x * 8 + 3;
@@ -36,16 +35,14 @@ Vector* MapBoard(Vector* base) {
 	return new Vector{ x,y };
 }
 
-void Clear(Vector* mapped) {
-	for (int i = -3; i < 3; i++) {
-		board[mapped->y][mapped->x + i] = ' ';
-	}
-}
+bool MergeData(char* outBoard[15]) {
+	std::copy(board, board + 15, outBoard);
+	MakeBoard();
 
-bool UpdateBoard() {
 	for (int y = 0; y < 4; y++) {
 		for (int x = 0; x < 4; x++) {
-			Vector* mapped = MapBoard(new Vector{ x,y });
+			Vector* base = new Vector{ x,y };
+			Vector* mapped = MapBoard(base);
 
 			if (mapped->x == 0 && mapped->y == 0) return false;
 
@@ -57,14 +54,16 @@ bool UpdateBoard() {
 			if (mapped->x - delta < 0 || mapped->x + delta > 31) return false;
 
 			for (int i = 0; i < len; i++) {
-				if (sValue == "0")
-					Clear(mapped);
-				else
-					board[mapped->y][mapped->x - delta] = sValue.c_str()[i];
+				std::string out = sValue.c_str();
+				if(out != "0") outBoard[mapped->y][mapped->x - delta] = out[i];
 				delta--;
-			}	
+			}
+
+			delete base;
+			delete mapped;
 		}
 	}
+
 	return true;
 }
 
@@ -79,11 +78,46 @@ bool UpdateData(Vector* base, int value) {
 	return true;
 }
 
-bool LoadFromBuf(int** buf) {
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			data[i][j] = buf[i][j];
+static bool GetFree(Vector* free) {
+	int count = 0;
+	for (int* line : data) {
+		for (int i = 0; i < 4; i++) {
+			if (line[i] = 0) count++;
 		}
 	}
+
+	if (count == 0) return false;
+
+	srand((unsigned)time(NULL));
+	int tile = rand() % count;
+
+	for (int y = 0; y < 4; y++) {
+		for (int x = 0; x < 4; x++) {
+			if (data[y][x] == 0) count--;
+
+			if (count == 0) {
+				free->x = x;
+				free->y = y;
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+bool NewTile() {
+	Vector free;
+	if (!GetFree(&free)) return false;
+
+	srand((unsigned)time(NULL));
+	int tileSel = rand() % 10;
+	int tile;
+
+	if (tileSel == 9) tile = 4;
+	else tile = 2;
+
+	UpdateData(&free, tile);
+
 	return true;
 }

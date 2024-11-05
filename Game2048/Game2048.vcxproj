@@ -128,18 +128,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\action.cpp" />
-    <ClCompile Include="src\action\compress.cpp" />
     <ClCompile Include="src\action\move.cpp" />
     <ClCompile Include="src\data.cpp" />
     <ClCompile Include="src\ioControl.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\model\ActionHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\action.h" />
-    <ClInclude Include="includes\action\compress.h" />
     <ClInclude Include="includes\action\move.h" />
     <ClInclude Include="includes\data.h" />
     <ClInclude Include="includes\ioControl.h" />
+    <ClInclude Include="includes\model\ActionHelper.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

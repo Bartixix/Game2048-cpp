@@ -1,81 +1,87 @@
-#include "../../includes/data.h"
+#include <cmath>
 
-bool mU() {
+#include "../../includes/model/ActionHelper.h"
+
+extern int* data[4];
+
+bool mU(bool compress) {
 	bool changed = false;
-	for (int i = 0; i < 16; i++) {
-		int x = (int)floor((double)i / 4);
-		int y = i % 4;
 
-		if (data[y][x] == 0) {
-			for (int j = y; j < 4; j++) {
-				if (data[j][x] != 0) {
-					data[y][x] = data[j][x];
-					data[j][x] = 0;
-					changed = true;
-					break;
-				};
+	for (int x = 0; x < 4; x++) {
+		Helper xHelper;
+
+		for (int y = 0; y < 4; y++) {
+			if (data[y][x] != 0) {
+				xHelper.Add(data[y][x]);
+				changed = true;
 			}
 		}
+
+		if (compress) xHelper.Cmp();
+		xHelper.Cpy(data, false, x);
 	}
+
 	return changed;
 }
 
-bool mD() {
+bool mD(bool compress) {
 	bool changed = false;
-	for (int i = 15; i >= 0; i--) {
-		int x = (int)floor((double)i / 4);
-		int y = i % 4;
 
-		if (data[y][x] == 0) {
-			for (int j = y; j >= 0; j--) {
-				if (data[j][x] != 0) {
-					data[y][x] = data[j][x];
-					data[j][x] = 0;
-					changed = true;
-					break;
-				};
+	for (int x = 0; x < 4; x++) {
+		Helper xHelper;
+		xHelper.Reverse();
+
+		for (int y = 3; y >= 0; y--) {
+			if (data[y][x] != 0) {
+				xHelper.Add(data[y][x]);
+				changed = true;
 			}
 		}
+
+		if (compress) xHelper.Cmp();
+		xHelper.Cpy(data, false, x);
 	}
+
 	return changed;
 }
 
-bool mR() {
+bool mR(bool compress) {
 	bool changed = false;
-	for (int i = 15; i >= 0; i--) {
-		int y = (int)floor((double)i / 4);
-		int x = i % 4;
 
-		if (data[y][x] == 0) {
-			for (int j = x; j >= 0; j--) {
-				if (data[y][j] != 0) {
-					data[y][x] = data[y][j];
-					data[y][j] = 0;
-					changed = true;
-					break;
-				};
+	for (int y = 0; y < 4; y++) {
+		Helper yHelper;
+		yHelper.Reverse();
+
+		for (int x = 3; x >= 0; x--) {
+			if (data[y][x] != 0) {
+				yHelper.Add(data[y][x]);
+				changed = true;
 			}
 		}
+
+		if (compress) yHelper.Cmp();
+		yHelper.Cpy(data, true, y);
 	}
+
 	return changed;
 }
 
-bool mL() {
+bool mL(bool compress) {
 	bool changed = false;
-	for (int i = 0; i < 16; i++) {
-		int y = (int)floor((double)i / 4);
-		int x = i % 4;
 
-		if (data[y][x] == 0) {
-			for (int j = x; j < 4; j++) {
-				if (data[y][j] != 0) {
-					data[y][x] = data[y][j];
-					data[y][j] = 0;
-					changed = true;
-					break;
-				};
+	for (int y = 0; y < 4; y++) {
+		Helper yHelper;
+
+		for (int x = 0; x < 4; x++) {
+			if (data[y][x] != 0) {
+				yHelper.Add(data[y][x]);
+				changed = true;
 			}
 		}
+
+		if (compress) yHelper.Cmp();
+		yHelper.Cpy(data, true, y);
 	}
+
 	return changed;
 }

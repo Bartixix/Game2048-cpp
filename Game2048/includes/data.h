@@ -2,18 +2,17 @@
 
 #include <string>
 
-extern int data[4][4];
-extern char board[15][32];
-
 struct Vector {
 	int x;
 	int y;
 };
 
-Vector* MapBoard(Vector* base);
+void MakeBoard();
 
-bool UpdateBoard();
+bool MergeData(char* outBoard[15]);
+
+Vector* MapBoard(Vector* base);
 
 bool UpdateData(Vector* base, int value);
 
-bool LoadFromBuf(int** buf);
+bool NewTile();
