@@ -80,9 +80,9 @@ bool UpdateData(Vector* base, int value) {
 
 static bool GetFree(Vector* free) {
 	int count = 0;
-	for (int* line : data) {
-		for (int i = 0; i < 4; i++) {
-			if (line[i] = 0) count++;
+	for (int y = 0; y < 4; y++) {
+		for (int x = 0; x < 4; x++) {
+			if (data[y][x] == 0) count++;
 		}
 	}
 

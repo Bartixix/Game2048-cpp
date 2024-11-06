@@ -39,10 +39,12 @@ int main(int argc, char** argv) {
 		if (Move(input, true)) {
 			Move(input, false);
 			std::cout << "\x1B[2J\x1B[H";
-			NewTile();
+			if (!NewTile()) break;
 			PrintBoard();
 		}
 	}
+
+	std::cout << "lost" << std::endl;
 
 	std::cin.get();
 }
